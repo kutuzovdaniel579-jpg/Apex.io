@@ -82,6 +82,46 @@ body, html {
 .skin.active { border-color: white; transform: scale(1.1); }
 .cyan { background: #00fff2; } .magenta { background: #ff00ff; } .lime { background: #bcff00; } .orange { background: #ff9500; }
 
+/* Fix voor Splash Centrering */
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* F11 / Fullscreen Fix */
+#gameCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+}
+
+/* Zorg dat UI altijd bovenop ligt en schaalt */
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--bg);
+    overflow: hidden; /* Geen scrollbars in F11 */
+}
+
+/* Verbeterde Logo styling */
+.logo {
+    font-size: clamp(40px, 10vw, 80px); /* Schaaalt mee met schermgrootte */
+    line-height: 1;
+}
+
 /* End Screen */
 .win-theme { color: #bcff00; }
 .lose-theme { color: #ff0055; }
