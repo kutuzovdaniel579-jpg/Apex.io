@@ -3,79 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex.io | Arena</title>
+    <title>Apex.io | Tactical Arena</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="splash-screen" class="overlay">
-        <div class="splash-content">
-            <h1 class="logo">A<span>PEX.IO</span></h1>
-            <p class="tagline">The Ultimate Cell Competition</p>
-            <button class="main-entry-btn" onclick="ui.goToLogin()">START NOW</button>
+        <div class="hero-container">
+            <div class="glitch-wrapper">
+                <h1 class="logo" data-text="APEX.IO">A<span>PEX.IO</span></h1>
+            </div>
+            <p class="tagline">SURVIVE. CONSUME. DOMINATE.</p>
+            <div class="button-group">
+                <button class="primary-btn pulse" onclick="ui.goToLogin()">START NOW</button>
+            </div>
         </div>
     </div>
 
     <div id="login-screen" class="overlay hidden">
-        <div class="auth-box">
-            <h2>ARENA ACCESS</h2>
-            <input type="text" id="username" placeholder="Username" maxlength="12">
-            <input type="password" id="password" placeholder="Password">
-            <div class="auth-buttons">
-                <button class="auth-btn" onclick="ui.auth('login')">LOGIN</button>
-                <button class="auth-btn secondary" onclick="ui.auth('register')">REGISTER</button>
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>ARENA ACCESS</h2>
+                <p>Identify yourself, Pilot.</p>
             </div>
-            <p id="auth-msg"></p>
+            <div class="auth-body">
+                <div class="input-field">
+                    <input type="text" id="username" placeholder="Username" maxlength="12">
+                </div>
+                <div class="input-field">
+                    <input type="password" id="password" placeholder="Password">
+                </div>
+                <div class="auth-actions">
+                    <button class="btn login-btn" onclick="ui.auth('login')">LOGIN</button>
+                    <button class="btn reg-btn" onclick="ui.auth('register')">REGISTER</button>
+                </div>
+                <p id="auth-msg"></p>
+            </div>
         </div>
     </div>
 
     <div id="main-hub" class="overlay hidden">
         <div class="hub-container">
             <nav class="sidebar">
-                <button class="nav-item active" onclick="ui.tab('modes', this)">PLAY</button>
-                <button class="nav-item" onclick="ui.tab('shop', this)">SKINS</button>
-                <button class="nav-item" onclick="ui.tab('rewards', this)">REWARDS</button>
+                <button class="nav-item active" onclick="ui.tab('modes', this)">ARENA</button>
+                <button class="nav-item" onclick="ui.tab('shop', this)">ARMORY</button>
+                <button class="nav-item" onclick="ui.tab('rewards', this)">VAULT</button>
             </nav>
             <main class="viewport">
                 <section id="modes" class="tab-view">
                     <div class="mode-grid">
-                        <div class="card active" onclick="ui.setMode('classic', this)">CLASSIC</div>
-                        <div class="card" onclick="ui.setMode('rush', this)">RUSH</div>
+                        <div class="mode-card active" onclick="ui.setMode('classic', this)">
+                            <h3>CLASSIC</h3>
+                            <p>Unlimited survival</p>
+                        </div>
+                        <div class="mode-card" onclick="ui.setMode('rush', this)">
+                            <h3>RUSH</h3>
+                            <p>2:00 Time trial</p>
+                        </div>
                     </div>
-                    <div class="diff-grid">
-                        <button class="diff-btn active" onclick="ui.setDiff('easy', this)">EASY</button>
-                        <button class="diff-btn" onclick="ui.setDiff('hard', this)">HARD</button>
+                    <div class="diff-strip">
+                        <button class="diff-pill active" onclick="ui.setDiff('easy', this)">TRAINING</button>
+                        <button class="diff-pill" onclick="ui.setDiff('hard', this)">HARDCORE</button>
                     </div>
-                    <button class="start-btn" onclick="ui.start()">START MATCH</button>
+                    <button class="launch-btn" onclick="ui.start()">LAUNCH MISSION</button>
                 </section>
                 <section id="shop" class="tab-view hidden">
-                    <h3>SKINS</h3>
+                    <h2 class="section-title">CHOOSE YOUR SKIN</h2>
                     <div class="skin-grid">
-                        <div class="skin" style="background:#00fff2" onclick="ui.setSkin('#00fff2')"></div>
-                        <div class="skin" style="background:#ff00ff" onclick="ui.setSkin('#ff00ff')"></div>
-                        <div class="skin" style="background:#bcff00" onclick="ui.setSkin('#bcff00')"></div>
+                        <div class="skin-item" style="--c:#00fff2" onclick="ui.setSkin('#00fff2')"></div>
+                        <div class="skin-item" style="--c:#ff00ff" onclick="ui.setSkin('#ff00ff')"></div>
+                        <div class="skin-item" style="--c:#bcff00" onclick="ui.setSkin('#bcff00')"></div>
                     </div>
                 </section>
                 <section id="rewards" class="tab-view hidden">
-                    <p>Coins: <span id="hub-coin-count">0</span></p>
+                    <div class="stat-box">
+                        <span>CURRENT COINS:</span>
+                        <h2 id="hub-coin-count">0</h2>
+                    </div>
                 </section>
             </main>
         </div>
     </div>
 
     <div id="leaderboard">
-        <h3>TOP 5</h3>
+        <div class="lb-header">TOP SURVIVORS</div>
         <div id="leaderboard-list"></div>
     </div>
-    <div id="minimap-container">
-        <canvas id="minimap"></canvas>
-    </div>
+    <div id="minimap-container"><canvas id="minimap"></canvas></div>
     <div id="rush-timer" class="hidden">120</div>
 
     <div id="end-screen" class="overlay hidden">
-        <h2 id="status-text">GAME OVER</h2>
-        <p>MASS: <span id="final-mass">0</span></p>
-        <button class="start-btn" onclick="location.reload()">BACK TO HUB</button>
+        <div class="result-card">
+            <h2 id="status-text">DEFEATED</h2>
+            <div class="final-score">MASS: <span id="final-mass">0</span></div>
+            <button class="launch-btn" onclick="location.reload()">RETURN TO BASE</button>
+        </div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
