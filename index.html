@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex.io | Rise to Dominance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="ui-layer">
+        <div class="menu-container">
+            <h1 class="logo">A<span>PEX.IO</span></h1>
+            <p class="tagline">RISE TO DOMINANCE</p>
+            
+            <div class="stats-box">
+                <button id="play-btn">PLAY</button>
+                <div class="info">
+                    <p>HIGHEST MASS: <span id="high-score">0</span></p>
+                    <p>PLAYERS ONLINE: 1</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="scoreboard" class="hidden">
+            <h3>SCOREBOARD</h3>
+            <ul id="score-list">
+                <li>1. YOU <span class="rank-tri">▲</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script src="game.js"></script>
+</body>
+</html>
