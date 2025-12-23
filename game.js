@@ -87,7 +87,7 @@ function initGame() {
 }
 
 function spawnBot() {
-    const names = ["Cortex", "Zenith", "Blaze", "Fury", "Vortex"];
+    const names = ["Cortex", "Zenith", "Blaze", "Fury", "Vortex", "Grany"];
     const name = names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*99);
     bots.push({
         name, x: Math.random()*canvas.width, y: Math.random()*canvas.height,
