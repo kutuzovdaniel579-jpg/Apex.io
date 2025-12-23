@@ -1,45 +1,36 @@
-:root { --neon: #00fff2; --danger: #ff0055; --bg: #0a0b10; }
-body, html { margin: 0; padding: 0; overflow: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: white; }
+:root { --neon: #00fff2; --bg: #050608; }
+body, html { margin: 0; padding: 0; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', sans-serif; color: white; }
 
-.overlay { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; background: rgba(5, 6, 8, 0.9); backdrop-filter: blur(10px); }
+.overlay { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; background: var(--bg); }
 .hidden { display: none !important; }
+canvas { position: fixed; top: 0; left: 0; z-index: 1; }
 
-.hub-container { display: flex; width: 850px; height: 500px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; }
-.sidebar { width: 180px; background: rgba(0,0,0,0.3); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+/* Splash & Auth */
+.logo { font-size: 80px; letter-spacing: 10px; margin-bottom: 10px; }
+.logo span { color: var(--neon); }
+.tagline { letter-spacing: 4px; color: rgba(255,255,255,0.4); margin-top: -10px; margin-bottom: 30px; }
+.main-entry-btn { padding: 15px 40px; font-size: 20px; background: var(--neon); border: none; cursor: pointer; font-weight: bold; border-radius: 5px; }
 
-.nav-item, .diff-btn, .start-btn, .main-btn, .card { 
-    padding: 14px; border: none; background: rgba(255,255,255,0.05); color: #ccc; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; 
-}
-.nav-item:hover, .card:hover { background: rgba(255,255,255,0.1); }
-.active { background: var(--neon) !important; color: #000 !important; box-shadow: 0 0 20px rgba(0,255,242,0.4); }
+.auth-box { background: #111; padding: 30px; border-radius: 15px; border: 1px solid #222; width: 300px; display: flex; flex-direction: column; gap: 15px; }
+.auth-box input { padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 5px; }
+.auth-buttons { display: flex; gap: 10px; }
+.auth-btn { flex: 1; padding: 10px; background: var(--neon); border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.auth-btn.secondary { background: #333; color: white; }
 
+/* Hub */
+.hub-container { display: flex; width: 800px; height: 450px; background: #111; border-radius: 15px; overflow: hidden; }
+.sidebar { width: 160px; background: #0a0a0a; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.nav-item { padding: 12px; background: #1a1a1a; border: none; color: white; cursor: pointer; border-radius: 5px; text-align: left; }
+.nav-item.active { background: var(--neon); color: black; font-weight: bold; }
 .viewport { flex: 1; padding: 30px; position: relative; }
-.mode-grid { display: flex; gap: 15px; margin-bottom: 25px; }
-.card { flex: 1; height: 100px; display: flex; align-items: center; justify-content: center; border: 2px solid transparent; }
-.start-btn { position: absolute; bottom: 30px; left: 30px; right: 30px; background: var(--neon); color: black; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+.mode-grid, .diff-grid { display: flex; gap: 10px; margin-bottom: 20px; }
+.card { flex: 1; padding: 30px; background: #1a1a1a; border-radius: 10px; text-align: center; cursor: pointer; }
+.card.active { border: 2px solid var(--neon); }
+.start-btn { width: 100%; padding: 15px; background: var(--neon); border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
-.skin-grid { display: flex; gap: 15px; }
-.skin { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; }
-.skin:hover { transform: scale(1.1); }
-
-/* Leaderboard Styling */
-#leaderboard {
-    position: fixed; top: 20px; right: 20px;
-    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
-    padding: 15px; border-radius: 10px; width: 180px;
-    border: 1px solid rgba(255, 255, 255, 0.1); z-index: 50;
-}
-#leaderboard h3 { margin: 0 0 10px 0; font-size: 14px; color: var(--neon); letter-spacing: 1px; }
-.leader-item { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
-.leader-item.player { color: var(--neon); font-weight: bold; }
-
-/* Minimap Styling */
-#minimap-container {
-    position: fixed; bottom: 20px; right: 20px;
-    width: 150px; height: 150px;
-    background: rgba(0, 0, 0, 0.6); border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px; z-index: 50; overflow: hidden;
-}
-#minimap { width: 100%; height: 100%; }
-
-#rush-timer { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); font-size: 30px; font-weight: 900; color: var(--neon); z-index: 50; text-shadow: 0 0 10px var(--neon); }
+/* HUD */
+#leaderboard { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 10px; width: 180px; z-index: 50; }
+.leader-item { display: flex; justify-content: space-between; font-size: 14px; margin-top: 5px; }
+.leader-item.player { color: var(--neon); }
+#minimap-container { position: fixed; bottom: 20px; right: 20px; width: 150px; height: 150px; background: rgba(0,0,0,0.7); border: 1px solid #333; z-index: 50; }
+#rush-timer { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); font-size: 40px; color: var(--neon); z-index: 50; }
