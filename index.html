@@ -10,50 +10,50 @@
 
     <div id="splash-screen" class="overlay">
         <h1 class="logo">A<span>PEX.IO</span></h1>
-        <button class="main-entry-btn" onclick="showHub()">ENTER ARENA</button>
+        <button class="main-btn" onclick="ui.showHub()">ENTER ARENA</button>
     </div>
 
     <div id="main-hub" class="overlay hidden">
         <div class="hub-container">
             <nav class="sidebar">
-                <button class="nav-item active" onclick="showTab('modes-section', this)">PLAY</button>
-                <button class="nav-item" onclick="showTab('shop-section', this)">SKINS</button>
-                <button class="nav-item" onclick="showTab('daily-section', this)">REWARDS</button>
+                <button class="nav-item active" onclick="ui.tab('modes', this)">PLAY</button>
+                <button class="nav-item" onclick="ui.tab('shop', this)">SKINS</button>
+                <button class="nav-item" onclick="ui.tab('rewards', this)">REWARDS</button>
             </nav>
 
             <main class="viewport">
-                <section id="modes-section" class="tab-view">
-                    <div class="mode-cards">
-                        <div class="card active" onclick="setMode('classic', this)">CLASSIC</div>
-                        <div class="card" onclick="setMode('rush', this)">RUSH</div>
+                <section id="modes" class="tab-view">
+                    <div class="mode-grid">
+                        <div class="card active" onclick="ui.setMode('classic', this)">CLASSIC</div>
+                        <div class="card" onclick="ui.setMode('rush', this)">RUSH (2m)</div>
                     </div>
-                    <div class="diff-selector">
-                        <button class="diff-btn active" onclick="setDiff('easy', this)">EASY</button>
-                        <button class="diff-btn" onclick="setDiff('medium', this)">MEDIUM</button>
-                        <button class="diff-btn" onclick="setDiff('hardcore', this)">ULTRA</button>
+                    <div class="diff-grid">
+                        <button class="diff-btn active" onclick="ui.setDiff('easy', this)">EASY</button>
+                        <button class="diff-btn" onclick="ui.setDiff('hard', this)">HARD</button>
                     </div>
-                    <button class="action-btn" onclick="startGame()">START MATCH</button>
+                    <button class="start-btn" onclick="ui.start()">START MATCH</button>
                 </section>
 
-                <section id="shop-section" class="tab-view hidden">
+                <section id="shop" class="tab-view hidden">
+                    <h3>SELECT COLOR</h3>
                     <div class="skin-grid">
-                        <div class="skin cyan" onclick="setSkin('#00fff2', this)"></div>
-                        <div class="skin magenta" onclick="setSkin('#ff00ff', this)"></div>
-                        <div class="skin lime" onclick="setSkin('#bcff00', this)"></div>
+                        <div class="skin" style="background:#00fff2" onclick="ui.setSkin('#00fff2')"></div>
+                        <div class="skin" style="background:#ff00ff" onclick="ui.setSkin('#ff00ff')"></div>
+                        <div class="skin" style="background:#bcff00" onclick="ui.setSkin('#bcff00')"></div>
                     </div>
                 </section>
 
-                <section id="daily-section" class="tab-view hidden">
-                    <p>Rewards working!</p>
+                <section id="rewards" class="tab-view hidden">
+                    <p>Daily bonus: +100 Coins!</p>
                 </section>
             </main>
         </div>
     </div>
 
     <div id="end-screen" class="overlay hidden">
-        <h2>GAME OVER</h2>
+        <h2 id="status-text">GAME OVER</h2>
         <p>MASS: <span id="final-mass">0</span></p>
-        <button class="action-btn" onclick="location.reload()">BACK TO HUB</button>
+        <button class="start-btn" onclick="location.reload()">BACK TO HUB</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
