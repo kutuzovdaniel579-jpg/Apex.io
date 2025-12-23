@@ -30,13 +30,18 @@ body, html {
 
 .hidden { display: none !important; }
 
-/* SPLASH SCREEN */
-.splash-center-box {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center;
+/* SCREEN SHAKE ANIMATIE */
+@keyframes shake {
+    0% { transform: translate(1px, 1px); }
+    20% { transform: translate(-3px, -2px); }
+    40% { transform: translate(3px, 2px); }
+    60% { transform: translate(-3px, 1px); }
+    100% { transform: translate(0px, 0px); }
 }
+.shake { animation: shake 0.3s ease-in-out; }
 
+/* LOGO & SPLASH */
+.splash-center-box { text-align: center; }
 .logo { font-size: clamp(50px, 12vw, 100px); font-weight: 900; letter-spacing: 15px; margin: 0; }
 .logo span { color: var(--accent); text-shadow: 0 0 30px rgba(0, 255, 242, 0.6); }
 .tagline { letter-spacing: 8px; opacity: 0.6; margin-top: 10px; }
@@ -47,12 +52,11 @@ body, html {
     border: none; border-radius: 50px;
     font-weight: 900; font-size: 22px;
     cursor: pointer; box-shadow: 0 0 30px rgba(0, 255, 242, 0.4);
-    transition: 0.3s ease; pointer-events: all;
+    transition: 0.3s ease;
 }
-
 .main-entry-btn:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(0, 255, 242, 0.7); }
 
-/* HUB & UI */
+/* HUB UI */
 #main-hub { justify-content: flex-start; padding: 50px; }
 .top-bar { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; }
 .avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--accent); margin-right: 20px; box-shadow: 0 0 20px var(--accent); }
@@ -67,7 +71,6 @@ body, html {
     padding: 20px; text-align: left; border-radius: 12px;
     cursor: pointer; font-weight: bold; transition: 0.2s;
 }
-
 .nav-item.active { background: var(--accent); color: black; }
 
 .viewport { flex: 1; background: var(--panel); border-radius: 20px; padding: 40px; border: 1px solid rgba(255, 255, 255, 0.05); }
