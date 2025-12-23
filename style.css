@@ -22,4 +22,24 @@ body, html { margin: 0; padding: 0; overflow: hidden; background: var(--bg); fon
 .skin { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; }
 .skin:hover { transform: scale(1.1); }
 
+/* Leaderboard Styling */
+#leaderboard {
+    position: fixed; top: 20px; right: 20px;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+    padding: 15px; border-radius: 10px; width: 180px;
+    border: 1px solid rgba(255, 255, 255, 0.1); z-index: 50;
+}
+#leaderboard h3 { margin: 0 0 10px 0; font-size: 14px; color: var(--neon); letter-spacing: 1px; }
+.leader-item { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+.leader-item.player { color: var(--neon); font-weight: bold; }
+
+/* Minimap Styling */
+#minimap-container {
+    position: fixed; bottom: 20px; right: 20px;
+    width: 150px; height: 150px;
+    background: rgba(0, 0, 0, 0.6); border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px; z-index: 50; overflow: hidden;
+}
+#minimap { width: 100%; height: 100%; }
+
 #rush-timer { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); font-size: 30px; font-weight: 900; color: var(--neon); z-index: 50; text-shadow: 0 0 10px var(--neon); }
