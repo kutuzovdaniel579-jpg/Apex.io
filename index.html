@@ -8,18 +8,25 @@
 </head>
 <body>
 
-    <div id="leaderboard">
-    <h3>LEADERBOARD</h3>
-    <div id="leaderboard-list"></div>
-</div>
-<div id="minimap-container">
-    <canvas id="minimap"></canvas>
-</div>
-<div id="rush-timer" class="hidden">120</div>
-    
     <div id="splash-screen" class="overlay">
-        <h1 class="logo">A<span>PEX.IO</span></h1>
-        <button class="main-btn" onclick="ui.showHub()">ENTER ARENA</button>
+        <div class="splash-content">
+            <h1 class="logo">A<span>PEX.IO</span></h1>
+            <p class="tagline">The Ultimate Cell Competition</p>
+            <button class="main-entry-btn" onclick="ui.goToLogin()">START NOW</button>
+        </div>
+    </div>
+
+    <div id="login-screen" class="overlay hidden">
+        <div class="auth-box">
+            <h2>ARENA ACCESS</h2>
+            <input type="text" id="username" placeholder="Username" maxlength="12">
+            <input type="password" id="password" placeholder="Password">
+            <div class="auth-buttons">
+                <button class="auth-btn" onclick="ui.auth('login')">LOGIN</button>
+                <button class="auth-btn secondary" onclick="ui.auth('register')">REGISTER</button>
+            </div>
+            <p id="auth-msg"></p>
+        </div>
     </div>
 
     <div id="main-hub" class="overlay hidden">
@@ -29,12 +36,11 @@
                 <button class="nav-item" onclick="ui.tab('shop', this)">SKINS</button>
                 <button class="nav-item" onclick="ui.tab('rewards', this)">REWARDS</button>
             </nav>
-
             <main class="viewport">
                 <section id="modes" class="tab-view">
                     <div class="mode-grid">
                         <div class="card active" onclick="ui.setMode('classic', this)">CLASSIC</div>
-                        <div class="card" onclick="ui.setMode('rush', this)">RUSH (2m)</div>
+                        <div class="card" onclick="ui.setMode('rush', this)">RUSH</div>
                     </div>
                     <div class="diff-grid">
                         <button class="diff-btn active" onclick="ui.setDiff('easy', this)">EASY</button>
@@ -42,22 +48,29 @@
                     </div>
                     <button class="start-btn" onclick="ui.start()">START MATCH</button>
                 </section>
-
                 <section id="shop" class="tab-view hidden">
-                    <h3>SELECT COLOR</h3>
+                    <h3>SKINS</h3>
                     <div class="skin-grid">
                         <div class="skin" style="background:#00fff2" onclick="ui.setSkin('#00fff2')"></div>
                         <div class="skin" style="background:#ff00ff" onclick="ui.setSkin('#ff00ff')"></div>
                         <div class="skin" style="background:#bcff00" onclick="ui.setSkin('#bcff00')"></div>
                     </div>
                 </section>
-
                 <section id="rewards" class="tab-view hidden">
-                    <p>Daily bonus: +100 Coins!</p>
+                    <p>Coins: <span id="hub-coin-count">0</span></p>
                 </section>
             </main>
         </div>
     </div>
+
+    <div id="leaderboard">
+        <h3>TOP 5</h3>
+        <div id="leaderboard-list"></div>
+    </div>
+    <div id="minimap-container">
+        <canvas id="minimap"></canvas>
+    </div>
+    <div id="rush-timer" class="hidden">120</div>
 
     <div id="end-screen" class="overlay hidden">
         <h2 id="status-text">GAME OVER</h2>
