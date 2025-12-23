@@ -5,90 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apex.io | Arena</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
     <div id="splash-screen" class="overlay">
-        <div class="splash-center-box">
-            <h1 class="logo">A<span>PEX.IO</span></h1>
-            <p class="tagline">RISE TO DOMINANCE</p>
-            <button id="to-hub-btn" class="main-entry-btn">ENTER ARENA</button>
-        </div>
+        <h1 class="logo">A<span>PEX.IO</span></h1>
+        <button class="main-entry-btn" onclick="showHub()">ENTER ARENA</button>
     </div>
 
     <div id="main-hub" class="overlay hidden">
-        <div class="top-bar">
-            <div class="user-info">
-                <div id="current-skin-preview" class="avatar"></div>
-                <div>
-                    <input type="text" id="username-input" value="APEX_PLAYER" maxlength="12">
-                    <p class="lvl-text">LEVEL <span id="user-level">12</span></p>
-                </div>
-            </div>
-            <div class="currency"><i class="fas fa-coins"></i> 2500</div>
-        </div>
-
         <div class="hub-container">
             <nav class="sidebar">
-                <button class="nav-item active" data-target="modes-section">PLAY</button>
-                <button class="nav-item" data-target="shop-section">SKINS</button>
-                <button class="nav-item" data-target="daily-section">REWARDS</button>
+                <button class="nav-item active" onclick="showTab('modes-section', this)">PLAY</button>
+                <button class="nav-item" onclick="showTab('shop-section', this)">SKINS</button>
+                <button class="nav-item" onclick="showTab('daily-section', this)">REWARDS</button>
             </nav>
 
             <main class="viewport">
                 <section id="modes-section" class="tab-view">
                     <div class="mode-cards">
-                        <div class="card active" data-mode="classic">
-                            <h3>CLASSIC</h3>
-                            <p>Eindeloos groeien. Geen tijdslimiet.</p>
-                        </div>
-                        <div class="card" data-mode="rush">
-                            <h3>RUSH</h3>
-                            <p>Overleef 2 minuten. Maximale actie.</p>
-                        </div>
+                        <div class="card active" onclick="setMode('classic', this)">CLASSIC</div>
+                        <div class="card" onclick="setMode('rush', this)">RUSH</div>
                     </div>
-
                     <div class="diff-selector">
-                        <button class="diff-btn active" data-diff="easy">EASY</button>
-                        <button class="diff-btn" data-diff="medium">MEDIUM</button>
-                        <button class="diff-btn" data-diff="hard">HARD</button>
-                        <button class="diff-btn" data-diff="hardcore">ULTRA</button>
+                        <button class="diff-btn active" onclick="setDiff('easy', this)">EASY</button>
+                        <button class="diff-btn" onclick="setDiff('medium', this)">MEDIUM</button>
+                        <button class="diff-btn" onclick="setDiff('hardcore', this)">ULTRA</button>
                     </div>
-
-                    <button id="start-match-btn" class="action-btn">START MATCH</button>
+                    <button class="action-btn" onclick="startGame()">START MATCH</button>
                 </section>
 
                 <section id="shop-section" class="tab-view hidden">
-                    <h3>SELECT YOUR CORE</h3>
                     <div class="skin-grid">
-                        <div class="skin cyan active" data-color="#00fff2"></div>
-                        <div class="skin magenta" data-color="#ff00ff"></div>
-                        <div class="skin lime" data-color="#bcff00"></div>
-                        <div class="skin orange" data-color="#ff9500"></div>
+                        <div class="skin cyan" onclick="setSkin('#00fff2', this)"></div>
+                        <div class="skin magenta" onclick="setSkin('#ff00ff', this)"></div>
+                        <div class="skin lime" onclick="setSkin('#bcff00', this)"></div>
                     </div>
                 </section>
 
                 <section id="daily-section" class="tab-view hidden">
-                    <h3>REWARDS</h3>
-                    <p>Dagelijkse bonus: 100 munten ontvangen!</p>
+                    <p>Rewards working!</p>
                 </section>
             </main>
         </div>
     </div>
 
     <div id="end-screen" class="overlay hidden">
-        <div class="end-content">
-            <h2 id="end-title">GAME OVER</h2>
-            <div class="end-stats">
-                <p>FINAL MASS: <span id="final-mass">0</span></p>
-            </div>
-            <button id="restart-btn" class="action-btn">BACK TO HUB</button>
-        </div>
+        <h2>GAME OVER</h2>
+        <p>MASS: <span id="final-mass">0</span></p>
+        <button class="action-btn" onclick="location.reload()">BACK TO HUB</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
-
     <script src="game.js"></script>
 </body>
 </html>
