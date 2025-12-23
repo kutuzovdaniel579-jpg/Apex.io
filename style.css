@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #050608;
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff;
+}
+
+/* Arena Background */
+#gameCanvas {
+    display: block;
+    background: radial-gradient(circle, #111111 0%, #050608 100%);
+}
+
+/* UI Layer */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+/* Logo & Menu */
+.menu-container {
+    text-align: center;
+    pointer-events: auto;
+}
+
+.logo {
+    font-size: 80px;
+    letter-spacing: 5px;
+    margin-bottom: 0;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0, 255, 242, 0.5);
+}
+
+.logo span {
+    color: #00fff2;
+}
+
+.tagline {
+    font-size: 14px;
+    letter-spacing: 8px;
+    color: #00fff2;
+    margin-top: -10px;
+    margin-bottom: 40px;
+}
+
+/* Buttons & Stats */
+#play-btn {
+    background: #00fff2;
+    border: none;
+    padding: 15px 60px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 255, 242, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#play-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0, 255, 242, 0.6);
+}
+
+.stats-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.info {
+    margin-top: 20px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* Scoreboard */
+#scoreboard {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 180px;
+}
+
+.rank-tri {
+    font-size: 10px;
+    color: #00fff2;
+    margin-left: 10px;
+}
+
+.hidden { display: none; }
