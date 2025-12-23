@@ -1,57 +1,54 @@
 /**
- * APEX.IO - DEFINITIEVE VERSIE
- * FIX: SFX activatie, Verbeterde VFX en Bot Growth
+ * APEX.IO - PRO VERSION
+ * FIX: SFX & VFX PC-compatibiliteit + Rode Randen Fix
  */
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// --- AUDIO ENGINE ---
-let audioCtx;
-function initAudio() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-}
+// --- AUDIO ENGINE FIX ---
+let audioCtx = null;
 
 function playSound(freq, type, duration, vol = 0.1) {
-    if (!audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    } catch (e) { console.error("Audio error", e); }
 }
 
 // Game State
 let isPlaying = false;
 let selectedColor = '#00fff2';
 let difficulty = 'easy';
-let selectedMode = 'classic';
-let timeLeft = 120;
 let bots = [];
 let particles = [];
 let explosions = []; 
-let mouse = { x: 0, y: 0 };
+let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let player = { x: 0, y: 0, radius: 22 };
 
 const diffSettings = {
-    easy: { botCount: 8, botSpeed: 1.2, growth: 1.2 },
-    medium: { botCount: 12, botSpeed: 2.2, growth: 1.8 },
-    hard: { botCount: 18, botSpeed: 3.2, growth: 2.5 },
-    hardcore: { botCount: 25, botSpeed: 4.5, growth: 4.0 }
+    easy: { botCount: 8, botSpeed: 1.2, growth: 1.5 },
+    medium: { botCount: 12, botSpeed: 2.2, growth: 2.2 },
+    hard: { botCount: 18, botSpeed: 3.2, growth: 3.0 },
+    hardcore: { botCount: 25, botSpeed: 4.5, growth: 4.5 }
 };
 
 const colors = ["#00fff2", "#ff00ff", "#bcff00", "#ff9500", "#ffffff"];
-const botNames = ["Alpha", "Zera", "Nova", "Predator", "Cortex", "Zenith", "Void", "Echo"];
 
 function resize() {
     canvas.width = window.innerWidth;
@@ -60,16 +57,14 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// --- UI HANDLERS ---
+// UI EVENTS
 document.getElementById('to-hub-btn').onclick = () => {
-    initAudio(); // Activeer audio op eerste klik
-    playSound(440, 'sine', 0.1);
+    playSound(440, 'sine', 0.1); // Forceert audio activatie
     document.getElementById('splash-screen').classList.add('hidden');
     document.getElementById('main-hub').classList.remove('hidden');
 };
 
 document.getElementById('start-match-btn').onclick = () => {
-    initAudio();
     playSound(660, 'sine', 0.2);
     document.getElementById('main-hub').classList.add('hidden');
     initGame();
@@ -77,16 +72,16 @@ document.getElementById('start-match-btn').onclick = () => {
     requestAnimationFrame(gameLoop);
 };
 
-// --- VFX ENGINE ---
+// --- VFX: EXPLOSIES ---
 function createExplosion(x, y, color) {
-    for(let i=0; i<20; i++) {
+    for(let i=0; i<25; i++) {
         explosions.push({
             x: x, y: y,
-            vx: (Math.random() - 0.5) * 12,
-            vy: (Math.random() - 0.5) * 12,
+            vx: (Math.random() - 0.5) * 15,
+            vy: (Math.random() - 0.5) * 15,
             life: 1.0,
             color: color,
-            size: Math.random() * 5 + 2
+            size: Math.random() * 6 + 2
         });
     }
 }
@@ -94,7 +89,7 @@ function createExplosion(x, y, color) {
 class Bot {
     constructor() {
         this.reset();
-        this.name = botNames[Math.floor(Math.random() * botNames.length)];
+        this.name = "BOT_" + Math.floor(Math.random() * 99);
         this.color = colors[Math.floor(Math.random() * colors.length)];
     }
     reset() {
@@ -112,43 +107,45 @@ class Bot {
             this.angle += (Math.random() - 0.5) * 0.15;
         }
 
-        const speed = Math.max(0.7, s.botSpeed - (this.radius / 120));
+        const speed = Math.max(0.7, s.botSpeed - (this.radius / 150));
         this.x += Math.cos(this.angle) * speed;
         this.y += Math.sin(this.angle) * speed;
 
         if(this.x < 0 || this.x > canvas.width) this.angle = Math.PI - this.angle;
         if(this.y < 0 || this.y > canvas.height) this.angle = -this.angle;
 
-        // BOT GROEIT HIER
+        // BOT GROWTH LOGIC
         particles.forEach((p, i) => {
             if(Math.hypot(this.x - p.x, this.y - p.y) < this.radius) {
                 particles.splice(i, 1);
-                this.radius += 0.35 * s.growth; 
+                this.radius += 0.4 * s.growth; 
                 spawnParticle();
             }
         });
     }
     draw() {
         ctx.save();
+        
+        // --- FIX: PC RODE RANDEN ---
+        // We tekenen eerst een grotere rode cirkel eronder voor 100% zichtbaarheid
+        if (this.radius > player.radius * 1.1) {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius + 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff0000';
+            ctx.fill();
+            // Gloei effect
+            ctx.shadowColor = 'red';
+            ctx.shadowBlur = 15;
+        }
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        
-        if (this.radius > player.radius * 1.1) {
-            ctx.strokeStyle = "#ff0000";
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            ctx.shadowColor = "red";
-            ctx.shadowBlur = 20;
-        } else {
-            ctx.shadowColor = this.color;
-            ctx.shadowBlur = 10;
-        }
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
         
-        ctx.fillStyle = "white";
-        ctx.font = "bold 11px Montserrat";
+        ctx.fillStyle = "rgba(255,255,255,0.8)";
+        ctx.font = "bold 12px Arial";
         ctx.textAlign = "center";
         ctx.fillText(this.name, this.x, this.y - this.radius - 10);
     }
@@ -167,19 +164,13 @@ function spawnParticle() {
         x: Math.random() * canvas.width, 
         y: Math.random() * canvas.height, 
         color: colors[Math.floor(Math.random() * colors.length)], 
-        radius: 2.5 
+        radius: 3 
     });
 }
 
 function endGame(win) {
     isPlaying = false;
-    if(!win) {
-        playSound(100, 'sawtooth', 0.4, 0.2);
-        document.body.classList.add('shake');
-        setTimeout(() => document.body.classList.remove('shake'), 300);
-    } else {
-        playSound(880, 'sine', 0.5, 0.2);
-    }
+    if(!win) playSound(80, 'sawtooth', 0.5, 0.3);
     document.getElementById('end-screen').classList.remove('hidden');
     document.getElementById('final-mass').innerText = Math.round(player.radius);
 }
@@ -188,31 +179,33 @@ window.onmousemove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
 
 function gameLoop() {
     if(!isPlaying) return;
+    
+    // Clear screen
     ctx.fillStyle = "#050608";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // DEELTJES & ETEN (Met SFX)
+    // Particles
     particles.forEach((p, i) => {
         ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2); ctx.fillStyle = p.color; ctx.fill();
         if(Math.hypot(player.x - p.x, player.y - p.y) < player.radius) {
             particles.splice(i, 1);
-            player.radius += 0.25;
-            playSound(1200, 'sine', 0.04, 0.03); // Eet geluid
+            player.radius += 0.3;
+            playSound(1000, 'sine', 0.05, 0.05); // EET GELUID
             spawnParticle();
         }
     });
 
+    // Bots
     const s = diffSettings[difficulty];
-    bots.forEach((bot, index) => {
+    bots.forEach((bot) => {
         bot.update(s);
         bot.draw();
         
-        const dist = Math.hypot(player.x - bot.x, player.y - bot.y);
-        if(dist < player.radius + bot.radius - 5) {
+        if(Math.hypot(player.x - bot.x, player.y - bot.y) < player.radius + bot.radius - 5) {
             if(player.radius > bot.radius * 1.1) {
                 player.radius += bot.radius * 0.5;
-                createExplosion(bot.x, bot.y, bot.color); // VFX
-                playSound(300, 'square', 0.2, 0.1); // Kill geluid
+                createExplosion(bot.x, bot.y, bot.color); // EXPLOSIE VFX
+                playSound(200, 'square', 0.2, 0.2); // KILL GELUID
                 bot.reset();
             } else if(bot.radius > player.radius * 1.1) {
                 endGame(false);
@@ -220,7 +213,7 @@ function gameLoop() {
         }
     });
 
-    // VFX EXPLOSIES RENDER
+    // Explosies renderen
     explosions.forEach((ex, i) => {
         ex.x += ex.vx; ex.y += ex.vy;
         ex.life -= 0.02;
@@ -231,27 +224,34 @@ function gameLoop() {
         if(ex.life <= 0) explosions.splice(i, 1);
     });
 
-    // PLAYER
+    // Player
     const angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
-    const pSpeed = Math.max(1.3, 4.0 - (player.radius / 100));
-    if(Math.hypot(mouse.x - player.x, mouse.y - player.y) > 5) {
-        player.x += Math.cos(angle) * pSpeed;
-        player.y += Math.sin(angle) * pSpeed;
-    }
-    ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2);
-    ctx.fillStyle = selectedColor; ctx.shadowBlur = 25; ctx.shadowColor = selectedColor;
-    ctx.fill(); ctx.shadowBlur = 0;
+    const pSpeed = Math.max(1.5, 4.2 - (player.radius / 100));
+    player.x += Math.cos(angle) * pSpeed;
+    player.y += Math.sin(angle) * pSpeed;
 
-    // HUD
-    ctx.fillStyle = "white"; ctx.font = "bold 16px Montserrat";
-    ctx.fillText(`MASS: ${Math.round(player.radius)}`, 30, 50);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+    ctx.fillStyle = selectedColor;
+    ctx.shadowColor = selectedColor;
+    ctx.shadowBlur = 20;
+    ctx.fill();
+    ctx.restore();
 
     requestAnimationFrame(gameLoop);
 }
 
-// Button listeners voor skins/diff (Zorg dat deze ook in index.html staan)
+// Koppelen van UI knoppen die in de HTML staan
 document.querySelectorAll('.diff-btn').forEach(b => b.onclick = () => {
     difficulty = b.dataset.diff;
     document.querySelectorAll('.diff-btn').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
+});
+
+document.querySelectorAll('.skin').forEach(s => {
+    s.onclick = () => {
+        selectedColor = s.dataset.color;
+        document.getElementById('current-skin-preview').style.backgroundColor = selectedColor;
+    };
 });
